@@ -27,7 +27,7 @@ LinkedList<ItemType>::~LinkedList() {
 
 template<class ItemType> 
 void LinkedList<ItemType>::write(std::ostream& out) {
-    nodePtr current = getHead();
+    Node* current = getHead();
     while(current != NULL) {
         out << current->getData() << std::endl;
         current = current->getNext();
@@ -42,7 +42,7 @@ bool LinkedList<ItemType>::contains(const ItemType& data) {
 template<class ItemType>
 int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
    if(checkPos(pos) == 0) {
-       nodePtr current = getHead();
+       Node* current = getHead();
        for(int i = 0; i < pos; ++i) {
            current = current->getNext();
        }
@@ -52,8 +52,8 @@ int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
 } 
            
 template<class ItemType>
-nodePtr* LinkedList<ItemType>::findPos(const ItemType& data) {
-    nodePtr* current = getHead();
+nodewilliams::Node<ItemType>* LinkedList<ItemType>::findPos(const ItemType& data) {
+    Node* current = getHead();
     while(current != NULL) {
         if(current->getData() == data) {
             return current;
@@ -64,11 +64,23 @@ nodePtr* LinkedList<ItemType>::findPos(const ItemType& data) {
 }
 
 template<class ItemType>
+int LinkedList<ItemType>::sortedInsert(const ItemType& data) {
+    Node* temp = getHead();
+    int pos = 0;
+    while(temp != NULL && temp->getData() < data) {
+            pos++;
+            temp = temp->getNext();
+        }
+    insert(pos, data);
+    return 0;
+}
+    
+template<class ItemType>
 int LinkedList<ItemType>::insert(int pos, const ItemType& data) {
     if(checkPos(pos) == 0) {
-        nodePtr* newNode = new nodewilliams::Node<ItemType>(data, NULL);
-        nodePtr* temp = head_;
-        if(head_ == NULL) {
+        Node* newNode = new Node(data, NULL);
+        Node* temp = head_;
+        if(empty()) {
             head_ = tail_ = newNode;
         }
         else if(pos == 0) {
@@ -109,8 +121,8 @@ int LinkedList<ItemType>::remove(const int& pos) {
         return -3;
     }
     if(checkPos(pos) == 0) {
-        nodePtr* toDelete = head_;
-        nodePtr* temp = head_;
+        Node* toDelete = head_;
+        Node* temp = head_;
         if(pos == 0) {
             head_ = toDelete->getNext();
         }

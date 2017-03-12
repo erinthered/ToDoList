@@ -11,24 +11,23 @@ Description:    Header File for Linked List Class
 #ifndef __CS235_LINKEDLIST_H_
 #define __CS235_LINKEDLIST_H_
 
-#include<fstream>
+#include<ostream>
 
 namespace listwilliams {
 
 template<class ItemType>
 class LinkedList {
 public:
-    typedef nodewilliams::Node<ItemType>* nodePtr;
+    typedef nodewilliams::Node<ItemType> Node;
 
     LinkedList();
     ~LinkedList();
 
-    nodewilliams::Node<ItemType>* getHead() { return head_; }
-    nodewilliams::Node<ItemType>* getTail() { return tail_; }
-    void setHead(nodewilliams::Node<ItemType>* head) { head_ = head; }
-    void setTail(nodewilliams::Node<ItemType>* tail) { tail_ = tail; }
+    Node* getHead() { return head_; }
+    Node* getTail() { return tail_; }
+    void setHead(Node* head) { head_ = head; }
+    void setTail(Node* tail) { tail_ = tail; }
 
-    void incrementSize() { ++size_; } // to delete
     int size() { return size_; }
     bool empty() { return size_ > 0 ? false : true; }
     bool contains(const ItemType& data);
@@ -36,6 +35,7 @@ public:
 
     void write(std::ostream& out);
 
+    int sortedInsert(const ItemType& data);
     int insert(int pos, const ItemType& data);
     int push_front(const ItemType& data);
     int push_back(const ItemType& data);
@@ -43,10 +43,10 @@ public:
     int remove(const int& pos);
      
 private:
-    nodewilliams::Node<ItemType> *head_, *tail_;
+    Node *head_, *tail_;
     int size_;
 
-    nodewilliams::Node<ItemType>* findPos(const ItemType& data);
+    Node* findPos(const ItemType& data);
     int checkPos(const int& pos);
 };
 
