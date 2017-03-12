@@ -45,6 +45,12 @@ myList.write(std::cout);
 
 std::cout << "Size is: " << myList.size() << std:: endl;
 
+myList.remove(0);
+myList.retrieve(0, myData);
+std::cout << myData << std::endl;
+assert(myData == 1);
+assert(myList.size() == 4);
+
 return 0;
 
 }

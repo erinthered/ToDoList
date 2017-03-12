@@ -18,7 +18,10 @@ namespace listwilliams {
 template<class ItemType>
 class LinkedList {
 public:
+    typedef nodewilliams::Node<ItemType>* nodePtr;
+
     LinkedList();
+    ~LinkedList();
 
     nodewilliams::Node<ItemType>* getHead() { return head_; }
     nodewilliams::Node<ItemType>* getTail() { return tail_; }
@@ -36,6 +39,8 @@ public:
     int insert(int pos, const ItemType& data);
     int push_front(const ItemType& data);
     int push_back(const ItemType& data);
+
+    int remove(const int& pos);
      
 private:
     nodewilliams::Node<ItemType> *head_, *tail_;

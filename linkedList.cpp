@@ -18,10 +18,17 @@ namespace listwilliams {
 template<class ItemType>
 LinkedList<ItemType>::LinkedList() : head_(NULL), tail_(NULL), size_(0) {}
 
+template<class ItemType>
+LinkedList<ItemType>::~LinkedList() {
+    while(size_ > 0) {
+        remove(0);
+    }
+}
+
 template<class ItemType> 
 void LinkedList<ItemType>::write(std::ostream& out) {
-    nodewilliams::Node<ItemType>* current = getHead();
-
+//    nodewilliams::Node<ItemType>* current = getHead();
+    nodePtr current = getHead();
     while(current != NULL) {
         out << current->getData() << std::endl;
         current = current->getNext();
@@ -36,7 +43,8 @@ bool LinkedList<ItemType>::contains(const ItemType& data) {
 template<class ItemType>
 int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
    if(checkPos(pos) == 0) {
-       nodewilliams::Node<ItemType>* current = getHead();
+       nodePtr current = getHead();
+//       nodewilliams::Node<ItemType>* current = getHead();
        for(int i = 0; i < pos; ++i) {
            current = current->getNext();
        }
@@ -59,49 +67,69 @@ nodewilliams::Node<ItemType>* LinkedList<ItemType>::findPos(const ItemType& data
 
 template<class ItemType>
 int LinkedList<ItemType>::insert(int pos, const ItemType& data) {
-    int positionCheck = checkPos(pos);    
-    if(positionCheck != 0) {
-        return positionCheck;
-    }
-    else {
+    if(checkPos(pos) == 0) {
         nodewilliams::Node<ItemType>* newNode = new nodewilliams::Node<ItemType>(data, NULL);
         nodewilliams::Node<ItemType>* temp = head_;
         if(head_ == NULL) {
             head_ = tail_ = newNode;
         }
+        else if(pos == 0) {
+            newNode->setNext(head_);
+            head_ = newNode;
+        }
+        else if(pos == size_) {
+            tail_->setNext(newNode);
+            tail_ = newNode;
+        }
         else {
-            for(int i = 0; i < pos; ++i) {
-                temp = temp->next_;
+            for(int i = 0; i < (pos-1); ++i) {
+                temp = temp->getNext();
             }
-            newNode->next_ = temp->next_;
-            temp->next_ = newNode;
+            newNode->setNext(temp->getNext());
+            temp->setNext(newNode);
         }
         ++size_;
-        return positionCheck;
     }
+    return checkPos(pos);
 }
 
 template<class ItemType>
 int LinkedList<ItemType>::push_front(const ItemType& data) {
-    nodewilliams::Node<ItemType>* new_node = new nodewilliams::Node<ItemType>(data, getHead());
-    if(size() == 0) {
-        setTail(new_node);
-    }
-    setHead(new_node);
-    ++size_;
+    insert(0, data);
     return 0;
 }
 
 template<class ItemType>
 int LinkedList<ItemType>::push_back(const ItemType& data) {
-    nodewilliams::Node<ItemType>* new_node = new nodewilliams::Node<ItemType>(data, NULL);
-    if(size() == 0) {
-        setHead(new_node);
-    }
-    getTail()->setNext(new_node);
-    setTail(new_node);
-    ++size_;
+    insert(size(), data);
     return 0;
+}
+
+template<class ItemType>
+int LinkedList<ItemType>::remove(const int& pos) {
+    if(head_ == NULL) {
+        return -3;
+    }
+    if(checkPos(pos) == 0) {
+        nodewilliams::Node<ItemType>* toDelete = head_;
+        nodewilliams::Node<ItemType>* temp = head_;
+        if(pos == 0) {
+            head_ = toDelete->getNext();
+        }
+        else {
+            for(int i = 0; i < (pos -1); ++i) {
+                temp = temp->getNext();
+            }
+            toDelete = temp->getNext();
+            temp->setNext(toDelete->getNext());
+        }
+        toDelete->setNext(NULL);
+        delete toDelete;
+        toDelete = NULL;
+        size_--;
+    }
+
+    return checkPos(pos); 
 }
 
 template<class ItemType>
