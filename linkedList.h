@@ -1,4 +1,4 @@
-/*************************************************************************
+/***********************************************************************
 Title:          linkedList.h
 Author:         Erin Williams
 Date Created:   3/3/17
@@ -12,42 +12,60 @@ Description:    Header File for Linked List Class
 #define __CS235_LINKEDLIST_H_
 
 #include<ostream>
+#include "node.h"
 
 namespace listwilliams {
 
 template<class ItemType>
 class LinkedList {
 public:
-    typedef nodewilliams::Node<ItemType> Node;
+
+    typedef Node<ItemType> Node;
 
     LinkedList();
     ~LinkedList();
+    LinkedList(const LinkedList<ItemType>& rhs);
+    const LinkedList<ItemType>& operator =(const LinkedList<ItemType>& rhs);
 
-    Node* getHead() { return head_; }
-    Node* getTail() { return tail_; }
-    void setHead(Node* head) { head_ = head; }
-    void setTail(Node* tail) { tail_ = tail; }
+    //Getters and Setters
+    inline Node* getHead() const { return head_; }
+    inline Node* getTail() const { return tail_; }
+    inline void setHead(Node* head) { head_ = head; }
+    inline void setTail(Node* tail) { tail_ = tail; }
 
-    int size() { return size_; }
-    bool empty() { return size_ > 0 ? false : true; }
-    bool contains(const ItemType& data);
-    int retrieve(int pos, ItemType& data); 
+    inline int size() const { return size_; }
+    inline void incrementSize() { ++size_; }
+    inline bool empty() const { return size() == 0; }
 
-    void write(std::ostream& out);
+    //Returns true if data is found in list, false if not found
+    bool contains (const ItemType& data) { return getPos(data) != NULL; }
+    //Function variable data contains value of data at position pos if
+    //data is found in list, returns error code if not found.
+    int retrieve(int pos, ItemType& data);
 
+    void write(std::ostream& out);  
+ //   template<class ItemType, typename Comparator>            
+ //   int sortedComparatorInsert(const ItemType& data, Comparator isLessThan);
     int sortedInsert(const ItemType& data);
-    int insert(int pos, const ItemType& data);
-    int push_front(const ItemType& data);
-    int push_back(const ItemType& data);
+    int insert(int pos, const ItemType& data);  
 
-    int remove(const int& pos);
-     
+    int remove(int pos);                        
+
+    int push_front(const ItemType& data);      
+    int push_back(const ItemType& data);       
+
+    int pop_front();                           
+    int pop_back();                            
+
+    int clearList();                            
+
 private:
     Node *head_, *tail_;
     int size_;
 
-    Node* findPos(const ItemType& data);
-    int checkPos(const int& pos);
+    Node* getPos(const ItemType& data);
+    int checkPos(int pos);                     
+    void initializeSentinals();               
 };
 
 } //LinkedListWilliams

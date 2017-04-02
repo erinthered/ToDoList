@@ -13,58 +13,20 @@ Description:    Header File for Linked List Class
 
 #include<ostream>
 #include "node.h"
+#include "linkedList.h"
 
 namespace listwilliams {
 
-template<class ItemType>
-class LinkedList {
+template<class ItemType, typename Comparator>
+class SortedLinkedList {
 public:
 
-    typedef Node<ItemType> Node;
+    inline int getList() const { return list_; }
 
-    LinkedList();
-    ~LinkedList();
-    LinkedList(const LinkedList<ItemType>& rhs);
-    const LinkedList<ItemType>& operator =(const LinkedList<ItemType>& rhs);
-
-    //Getters and Setters
-    inline Node* getHead() const { return head_; }
-    inline Node* getTail() const { return tail_; }
-    inline void setHead(Node* head) { head_ = head; }
-    inline void setTail(Node* tail) { tail_ = tail; }
-
-    inline int size() const { return size_; }
-    inline bool empty() const { return size() == 0; }
-
-    //Returns true if data is found in list, false if not found
-    bool contains (const ItemType& data) { return getPos(data) != NULL; }
-    //Function variable data contains value of data at position pos if
-    //data is found in list, returns error code if not found.
-    int retrieve(int pos, ItemType& data);
-
-    void write(std::ostream& out);  
-    template<class ItemType, typename Comparator>            
     int sortedComparatorInsert(const ItemType& data, Comparator isLessThan);
-    int sortedInsert(const ItemType& data);
-    int insert(int pos, const ItemType& data);  
-
-    int remove(int pos);                        
-
-    int push_front(const ItemType& data);      
-    int push_back(const ItemType& data);       
-
-    int pop_front();                           
-    int pop_back();                            
-
-    int clearList();                            
 
 private:
-    Node *head_, *tail_;
-    int size_;
-
-    Node* getPos(const ItemType& data);
-    int checkPos(int pos);                     
-    void initializeSentinals();               
+    LinkedList<ItemType> list_;
 };
 
 } //LinkedListWilliams

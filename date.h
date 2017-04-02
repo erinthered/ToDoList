@@ -18,7 +18,7 @@ namespace datewilliams {
 class Date {
 public:
 
-Date() : month_(0), day_(0), year_(0) {}
+//Date() : month_(0), day_(0), year_(0) {}
 Date(int month = 0, int day = 0, int year = 0) : month_(month), day_(day), year_(year) {}
 
 inline int getMonth() const { return month_; };
