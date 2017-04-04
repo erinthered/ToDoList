@@ -20,23 +20,25 @@ namespace taskwilliams {
 
 class EventTask : public Task {
 public:
-    EventTask(Date date, std::string description, std::string location, std::string time) : Task(date, description), location_(location), time_(time) {}
+    EventTask(Date date, std::string description, std::string location, std::string time, std::string type = "E") : Task(date, description, type), location_(location), time_(time) {}
 
     inline std::string getLocation() const { return location_; }
     inline void setLocation(std::string location) { location_ = location; }
     inline std::string getTime() const { return time_; }
     inline void setTime(std::string time) { time_ = time; }
 
-//    EventTask& operator =(const EventTask& rhs);
-    inline bool operator ==(const EventTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && location_ == rhs.location_ && time_ == rhs.time_; }
-    inline bool operator !=(const EventTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || location_ != rhs.location_ || time_ != rhs.time_; }
+    virtual EventTask& operator =(const EventTask& rhs);
+    virtual inline bool operator ==(const EventTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && location_ == rhs.location_ && time_ == rhs.time_; }
+    virtual inline bool operator !=(const EventTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || location_ != rhs.location_ || time_ != rhs.time_; }
 
-    friend std::ostream& operator <<(std::ostream& out, const EventTask& task) {
-        out << task.getDate() << " - " << task.getDescription() << task.location_ << task.time_ << std::endl;
-        return out;
-     }
+    virtual void outputDetailed(std::ostream& out);
+    
+//    friend std::ostream& operator <<(std::ostream& out, const EventTask& task) {
+//        out << task.getDate() << " - " << task.getDescription() << task.location_ << task.time_ << std::endl;
+//        return out;
+//     }
 
-private:
+protected:
     std::string location_;
     std::string time_;
 };

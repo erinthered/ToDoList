@@ -9,15 +9,20 @@ Description:    Implemenation File for Homework Task Class
 ************************************************************************/
 
 #include<string>
+#include<ostream>
 #include "homeworkTask.h"
 
 namespace taskwilliams {
 
-/*HomeworkTask& operator =(const HomeworkTask& rhs) {
-    setDescription(rhs.getDescription());;
-    setDate(rhs.getDate());
+HomeworkTask& HomeworkTask::operator =(const HomeworkTask& rhs) {
+    description_ = rhs.description_;
+    date_ = rhs.date_;
     course_ = rhs.course_;
-    return this;
+    return *this;
 }
-*/
+
+void HomeworkTask::outputDetailed(std::ostream& out) {
+    out << "\tSUBJECT: " << course_ << "\n";
+}
+
 } //taskwilliams

@@ -20,9 +20,11 @@ namespace listwilliams {
 template<class ItemType, typename Comparator>
 class SortedLinkedList {
 public:
+    inline LinkedList<ItemType> getList() const { return list_; }
+    inline int size() { return list_.size(); }
+    inline bool empty() { return list_.empty(); }
 
-    inline int getList() const { return list_; }
-
+    void remove(int pos) { list_.remove(pos); }
     int sortedComparatorInsert(const ItemType& data, Comparator isLessThan);
 
 private:

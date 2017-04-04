@@ -13,12 +13,18 @@ Description:    Implemenation File for Shopping Task Class
 
 namespace taskwilliams {
 
-/*ShoppingTask& operator =(const ShoppingTask& rhs) {
-    setDescription(rhs.getDescription());
-    setDate(rhs.getDate());
-    course_ = rhs.course_;
+ShoppingTask& ShoppingTask::operator =(const ShoppingTask& rhs) {
+    description_ = rhs.description_;
+    date_ = rhs.date_;
     items_ = rhs.items_;
-    return this;
+    return *this;
 }
-*/
+
+void ShoppingTask::outputDetailed(std::ostream& out) {
+    out << "\tITEMS TO PURCHASE: \n";
+    for(int i = 0; i < items_.size(); ++i) {
+        out << "\t" << items_[i] << "\n";
+    }
+}
+
 } //taskwilliams

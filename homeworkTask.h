@@ -20,21 +20,23 @@ namespace taskwilliams {
 
 class HomeworkTask : public Task {
 public:
-    HomeworkTask(Date date, std::string description, std::string course) : Task(date, description), course_(course) {}
+    HomeworkTask(Date date, std::string description, std::string course, std::string type = "H") : Task(date, description, type), course_(course) {}
 
     inline std::string getCourse() const { return course_; }
     inline void setCourse(std::string course) { course_ = course; }
 
-//    HomeworkTask& operator =(const HomeworkTask& rhs);
-    inline bool operator ==(const HomeworkTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && course_ == rhs.course_; }
-    inline bool operator !=(const HomeworkTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || course_ != rhs.course_; }
+    virtual HomeworkTask& operator =(const HomeworkTask& rhs);
+    virtual inline bool operator ==(const HomeworkTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && course_ == rhs.course_; }
+    virtual inline bool operator !=(const HomeworkTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || course_ != rhs.course_; }
 
-    friend std::ostream& operator <<(std::ostream& out, const HomeworkTask& task) {
-        out << task.getDate() << " - " << task.getDescription() << " - " << task.course_ << std::endl;
-        return out;
-     }
+    virtual void outputDetailed(std::ostream& out);
 
-private:
+//    friend std::ostream& operator <<(std::ostream& out, const HomeworkTask& task) {
+//        out << task.getDate() << " - " << task.getDescription() << " - " << task.course_ << std::endl;
+//        return out;
+ //    }
+
+protected:
     std::string course_;
 
 };

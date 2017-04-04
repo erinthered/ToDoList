@@ -80,22 +80,6 @@ void LinkedList<ItemType>::write(std::ostream& out) {
     }
 }
 
-/*template<class ItemType, typename Comparator>
-int LinkedList<ItemType>::sortedComparatorInsert(const ItemType& data, Comparator isLessThan) {
-    Node* current = head_->getNext();
-    while(current != tail_ && isLessThan(current->getData(), data)) {
-            current = current->getNext();
-     }
-    Node* newNode = new Node;
-    newNode->setData(data);
-    newNode->setPrevious(current->getPrevious());
-    newNode->setNext(current);
-    current->getPrevious()->setNext(newNode);
-    current->setPrevious(newNode);
-    ++size_;
-    return 0;
-}
-*/ 
 template<class ItemType>
 int LinkedList<ItemType>::sortedInsert(const ItemType& data) {
     Node* current = head_->getNext();

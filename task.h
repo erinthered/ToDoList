@@ -21,27 +21,28 @@ class Task {
 public:
     typedef datewilliams::Date Date;
 
-    Task(Date date, std::string description) : date_(date), description_(description) {}
-
+    Task(Date date, std::string description, std::string type = "G") : date_(date), description_(description), type_(type) {}
+//    Task(const Task& rhs);
+    ~Task() {};
+    
     inline std::string getDescription() const { return description_; }
     inline Date getDate() const { return date_; }
+    inline std::string getType() const { return type_; }
     inline void setDescription(std::string description) { description_ = description; } 
     inline void setDate(int month, int day, int year) { date_.setMonth(month); date_.setDay(day); date_.setYear(year); }
+    inline void setDate(Date date) { date_ = date; }
+    inline void setType(std::string type) { type_ = type; }
 
-//    Task& operator =(const Task& rhs);
-    inline bool operator ==(const Task& rhs) { return description_ == rhs.description_ && date_ == rhs.date_; }
-    inline bool operator !=(const Task& rhs) { return description_ != rhs.description_ || date_ != rhs.date_; }
-   
-//Need to write print and detailed print functions? Or just do this in main 
-    friend std::ostream& operator <<(std::ostream& out, const Task& task) { 
-        out << task.date_ << " - " << task.description_ << std::endl;
-        return out;
-     }     
+    virtual Task& operator =(const Task& rhs);
+    virtual inline bool operator ==(const Task& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate(); }
+    virtual inline bool operator !=(const Task& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate(); }
+  
+    virtual void outputDetailed(std::ostream& out) {} 
 
-private:
+protected:
     Date date_;
     std::string description_;
-
+    std::string type_;
 };
 
 } //taskwilliams

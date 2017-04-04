@@ -13,16 +13,18 @@ Description:    Implementation File for Date Class
 
 namespace datewilliams {
 
-/*Date& Date::operator =(const Date& rhs) {
+Date& Date::operator =(const Date& rhs) {
     setMonth(rhs.getMonth());
     setDay(rhs.getDay());
     setYear(rhs.getYear());
+    return *this;
 }
-*/
+
 std::ostream& operator <<(std::ostream& out, const Date& date) {
     out << std::setw(2) << std::setfill('0') << date.getMonth() << '/' << std::setw(2) << date.getDay() << '/' << date.getYear();
     return out;
 }
+
 bool Date::operator <(const Date& rhs) {
     if(year_ < rhs.year_) {
         return true;
@@ -38,8 +40,8 @@ bool Date::operator <(const Date& rhs) {
     }
 }
 
-//void Date::print(std::ostream& out) {
-//    out << date.getMonth() << '/' << date.getDay() << '/' << date.getYear();
-//}
+void Date::printMMDDYYYY(std::ostream& out) {
+    out << std::setw(2) << std::setfill('0') << month_ << '/' << std::setw(2) << day_ << '/' << year_;
+}
 
 } //datewilliams

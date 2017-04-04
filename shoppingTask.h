@@ -21,25 +21,26 @@ namespace taskwilliams {
 
 class ShoppingTask : public Task {
 public:
-    ShoppingTask(Date date, std::string description, std::vector<std::string> items) : Task(date, description), items_(items) {}
+    ShoppingTask(Date date, std::string description, std::vector<std::string> items, std::string type = "S") : Task(date, description, type), items_(items) {}
 
     inline std::vector<std::string> getItems() const { return items_; }
     inline void setItems(std::vector<std::string> items) { items_ = items; }
 
-//    ShoppingTask& operator =(const ShoppingTask& rhs);
+    virtual ShoppingTask& operator =(const ShoppingTask& rhs);
     inline bool operator ==(const ShoppingTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && items_ == rhs.items_; }
     inline bool operator !=(const ShoppingTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || items_ != rhs.items_; }
 
-    friend std::ostream& operator <<(std::ostream& out, const ShoppingTask& task) {
-        out << task.getDate() << " - " << task.getDescription();
-        for(int i = 0; i < task.items_.size(); ++i) {
-            out << task.items_[i];
-        }
-        out << std::endl;
-        return out;
-     }
+    virtual void outputDetailed(std::ostream& out);
+//    friend std::ostream& operator <<(std::ostream& out, const ShoppingTask& task) {
+//        out << task.getDate() << " - " << task.getDescription();
+//        for(int i = 0; i < task.items_.size(); ++i) {
+//            out << task.items_[i];
+//        }
+//        out << std::endl;
+//        return out;
+//     }
 
-private:
+protected:
     std::vector<std::string> items_;
 };
 

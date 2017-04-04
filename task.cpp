@@ -13,10 +13,15 @@ Description:    Implemenation File for Generic Task Class
 
 namespace taskwilliams {
 
-/*Task& operator =(const Task& rhs) {
+/*Task::Task(const Task&rhs) {
     description_ = rhs.description_;
     date_ = rhs.date_;
-    return;
 }
 */
+Task& Task::operator =(const Task& rhs) {
+    description_ = rhs.description_;
+    date_ = rhs.date_;
+    return *this;
+}
+
 } //taskwilliams
