@@ -9,16 +9,20 @@ Description:    Implemenation File for Event Task Class
 ************************************************************************/
 
 #include<string>
+#include<ostream>
 #include "eventTask.h"
 
 namespace taskwilliams {
 
-/*EventTask& operator =(const EventTask& rhs) {
-    setDescription(rhs.getDescription());
-    setDate(rhs.getDate());
+EventTask& EventTask::operator =(const EventTask& rhs) {
+    description_ = rhs.description_;
+    date_ = rhs.date_;
     location_ = rhs.location_;
-    time_ = rhs.time_
-    return this;
+    time_ = rhs.time_;
+    return *this;
 }
-*/
+
+void EventTask::outputDetailed(std::ostream& out) {
+    out << "\tWHERE: " << location_ << "\n" << "\tWHEN: " << time_ << "\n";
+}
 } //taskwilliams

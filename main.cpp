@@ -40,7 +40,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list);
 void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType);
 void printFormattedDate(Task* task);
 void deleteTask(SortedLinkedList<Task*, Comparator>& list);
-void completeTask(SortedLinkedList<Task*, Comparator>& list);
+void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
 
 int main() {
 
@@ -64,10 +64,10 @@ int main() {
                        deleteTask(toDoList);    
                 }
 		else if(command == "COMPLETE") {
-	            
+	               completeTask(toDoList, completedTasks); 
 		}
 		else if(command == "COMPLETED") {
-			//todo print completed function
+                       printTasks(completedTasks, command);			
 		}
 		else if(command == "SAVE") {
 			//todo save function
@@ -97,9 +97,24 @@ int main() {
 	return 0;
 }
 
-void completeTask(SortedLinkedList<Task*, Comparator>& list) {
+void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed) {
     if(list.empty()) {
-        std::cout << "You have not outstanding tasks!\n";
+        std::cout << "You have no outstanding tasks!\n";
+    }
+    else {
+        int pos;
+        std::cout << "Which task would you like to complete?\n";
+        std::cin >> pos;
+        while (pos < 0 || pos < list.size()) {
+            std::cout << "That was not a valid number. Please try again.\n";
+            std::cout << "Which task would you like to complete?\n";
+            std::cin >> pos;
+        }
+        Task* toComplete;
+        list.getList().retrieve(pos-1, toComplete);
+        completed.sortedComparatorInsert(toComplete, Comparator());
+        list.remove(pos-1);
+        std::cout << "Task marked complete successfully.\n";
     }
 }
 
