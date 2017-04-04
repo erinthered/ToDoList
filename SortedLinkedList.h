@@ -23,6 +23,8 @@ public:
     inline LinkedList<ItemType> getList() const { return list_; }
     inline int size() { return list_.size(); }
     inline bool empty() { return list_.empty(); }
+    inline Node<ItemType>* getHead() { return list_.getHead(); }
+    inline Node<ItemType>* getTail() { return list_.getTail(); }
 
     void remove(int pos) { list_.remove(pos); }
     int sortedComparatorInsert(const ItemType& data, Comparator isLessThan);

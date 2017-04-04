@@ -11,6 +11,7 @@ Description:    Main file for ToDo List Project
 #include<iostream>
 #include<string>
 #include<string.h>
+#include<fstream>
 #include "node.h"
 #include "linkedList.h"
 #include "SortedLinkedList.h"
@@ -41,6 +42,7 @@ void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType)
 void printFormattedDate(Task* task);
 void deleteTask(SortedLinkedList<Task*, Comparator>& list);
 void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
+void saveTasks(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
 
 int main() {
 
@@ -97,6 +99,32 @@ int main() {
 	return 0;
 }
 
+void saveTasks(SortedLinkedList<Task*, Comparator>& list) { 
+    if(list.empty()) {
+        std::cout << "You have no outstanding tasks!\n";
+    }
+    std::string filename;
+    std::ofstream out;
+    std::cout << "Where would you like to save your outstanding tasks?\n";
+    std::cin >> filename;
+    out.open(filename);
+    
+    Node<Task*>* current = list.getHead()->getNext();
+    for(int i = 0; i < list.size(); ++i) {
+            out << current->getData()->getType() << "|";
+            current->getData()->getDate().printMMDDYYYY(out);
+            out << "|" << current->getData()->getDescription();
+            if(current->getData()->getType() == "G") {
+                out << std::endl;
+            }
+ 
+            current = current->getNext();
+    }
+
+    
+}
+
+
 void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed) {
     if(list.empty()) {
         std::cout << "You have no outstanding tasks!\n";
@@ -105,7 +133,7 @@ void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Ta
         int pos;
         std::cout << "Which task would you like to complete?\n";
         std::cin >> pos;
-        while (pos < 0 || pos < list.size()) {
+        while (pos < 0 || pos > list.size()) {
             std::cout << "That was not a valid number. Please try again.\n";
             std::cout << "Which task would you like to complete?\n";
             std::cin >> pos;
@@ -232,6 +260,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 		HomeworkTask* homework = new HomeworkTask(date, description, course);
 		list.sortedComparatorInsert(homework, Comparator());
 	}
+        std::cout << "Task added successfully.\n";
 }                  
 
 Date getDateInput(std::string input) {
