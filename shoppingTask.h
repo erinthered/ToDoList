@@ -9,6 +9,7 @@ Description:    Header File for Shopping Task Class
 ************************************************************************/
 
 #include<ostream>
+#include<fstream>
 #include<string>
 #include<vector>
 #include "date.h"
@@ -31,14 +32,7 @@ public:
     inline bool operator !=(const ShoppingTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || items_ != rhs.items_; }
 
     virtual void outputDetailed(std::ostream& out);
-//    friend std::ostream& operator <<(std::ostream& out, const ShoppingTask& task) {
-//        out << task.getDate() << " - " << task.getDescription();
-//        for(int i = 0; i < task.items_.size(); ++i) {
-//            out << task.items_[i];
-//        }
-//        out << std::endl;
-//        return out;
-//     }
+    virtual void fileOutput(std::ofstream& out);
 
 protected:
     std::vector<std::string> items_;

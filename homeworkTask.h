@@ -10,6 +10,7 @@ Description:    Header File for Homework Task Class
 
 #include<ostream>
 #include<string>
+#include<fstream>
 #include "date.h"
 #include "task.h"
 
@@ -30,6 +31,7 @@ public:
     virtual inline bool operator !=(const HomeworkTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || course_ != rhs.course_; }
 
     virtual void outputDetailed(std::ostream& out);
+    virtual void fileOutput(std::ofstream& out) { out << "|" << course_ << "\n"; }
 
 //    friend std::ostream& operator <<(std::ostream& out, const HomeworkTask& task) {
 //        out << task.getDate() << " - " << task.getDescription() << " - " << task.course_ << std::endl;

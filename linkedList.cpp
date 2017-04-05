@@ -5,7 +5,7 @@ Date Created:   3/3/17
 Class:          Spring 2017, CSCI 235-04, Mon & Wed 7:00pm-8:15pm
 Professor:      Aarsh Vora
 Purpose:        Assignment #2
-Description:    Implementation file for Linked List Class
+Description:    Implementation file for Doubly Linked List Class
 *************************************************************************/
 
 #ifndef __CS235_LINKEDLIST_CPP_
@@ -16,10 +16,12 @@ Description:    Implementation file for Linked List Class
 
 namespace listwilliams {
 
+//Error codes used by checkPos() helper function
 namespace {
     enum PositionCode { goodPosition = 0, negativePosition = -1, outOfBoundsPosition = -2 }; 
 } // namespace
 
+//Construct new doubly linked list of size zero with empty head and tail sentinal nodes
 template<class ItemType>
 LinkedList<ItemType>::LinkedList() : size_(0) {
     initializeSentinals();
@@ -32,6 +34,7 @@ LinkedList<ItemType>::~LinkedList() {
     delete tail_;
 }
 
+//Deep copy constructor
 template<class ItemType>
 LinkedList<ItemType>::LinkedList(const LinkedList<ItemType>& rhs) {
     initializeSentinals();
@@ -59,6 +62,7 @@ const LinkedList<ItemType>& LinkedList<ItemType>::operator =(const LinkedList<It
     return *this;
 }
 
+//Find data in list, given position. Does error checking for valid position.
 template<class ItemType>
 int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
    if(checkPos(pos) == goodPosition) {
@@ -68,9 +72,11 @@ int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
         }
         data = current->getData();
    }
-   return checkPos(pos);
+   return checkPos(pos);  //Return error code -1 for negative position, -2 for out of bounds position
 }
 
+//Output all data in list
+//Precondition: Operator << must be defined for ItemType
 template<class ItemType>
 void LinkedList<ItemType>::write(std::ostream& out) {
     Node* current = head_->getNext();
@@ -80,6 +86,10 @@ void LinkedList<ItemType>::write(std::ostream& out) {
     }
 }
 
+//Insert data to list such that data in previous node < data < data in next node
+//Precondition: Operator < must be defined for ItemType
+//Postcondition: Size is incremented, data is inserted such that data in previous
+//node < data < data in next node
 template<class ItemType>
 int LinkedList<ItemType>::sortedInsert(const ItemType& data) {
     Node* current = head_->getNext();
@@ -95,7 +105,10 @@ int LinkedList<ItemType>::sortedInsert(const ItemType& data) {
     ++size_;
     return 0;
 }
-    
+
+//Insert data to list at specific position
+//Returns error code -1 if position given is negative, -2 if position is out of bounds.    
+//Size of list is incremented.
 template<class ItemType>
 int LinkedList<ItemType>::insert(int pos, const ItemType& data) {
     if(checkPos(pos) == goodPosition) {
@@ -116,6 +129,9 @@ int LinkedList<ItemType>::insert(int pos, const ItemType& data) {
     return checkPos(pos);
 }
 
+//Remove data from specific position
+//Returns error code -1 if position given is negative, -2 if position is out of bounds.
+//Size of list is decremented
 template<class ItemType>
 int LinkedList<ItemType>::remove(int pos) {
     if(checkPos(pos) == goodPosition) {
@@ -133,30 +149,39 @@ int LinkedList<ItemType>::remove(int pos) {
     return checkPos(pos);
 }
 
+//Add data to front of list
+//Size of list is incremented
 template<class ItemType>
 int LinkedList<ItemType>::push_front(const ItemType& data) {
     insert(0, data);
     return 0;
 }
 
+//Add data to back of list
+//Size of list is incremented
 template<class ItemType>
 int LinkedList<ItemType>::push_back(const ItemType& data) {
     insert(size(), data);
     return 0;
 }
 
+//Remove data from front of list
+//Size of list is decremented
 template<class ItemType>
 int LinkedList<ItemType>::pop_front() {
     remove(0);
     return 0;
 }
 
+//Remove data from back of list
+//Size of list is decremented
 template<class ItemType>
 int LinkedList<ItemType>::pop_back() {
     remove(size()-1);
     return 0;
 }
 
+//Remove all data from list
 template<class ItemType>
 int LinkedList<ItemType>::clearList() {
     while(!(empty())) {
@@ -165,6 +190,9 @@ int LinkedList<ItemType>::clearList() {
     return 0;
 }
 
+//Intialize head and tail sentinal nodes
+//Postcondition: head's next pointer points at tail, head's previous pointer
+//points at NULL, tail's previous pointer points at head, tail's next pointer points at NULL.
 template<class ItemType>
 void LinkedList<ItemType>::initializeSentinals() {
     head_ = new Node;
@@ -173,6 +201,9 @@ void LinkedList<ItemType>::initializeSentinals() {
     tail_->setPrevious(head_);
 }
 
+//Check that given position is not outside of the list
+//Returns -1 if pos is a negative integer, -2 if pos > size of list,
+//and 0 if position is a valid position in list
 template<class ItemType>
 int LinkedList<ItemType>::checkPos(int pos) {
     if(pos < 0) {
@@ -186,6 +217,7 @@ int LinkedList<ItemType>::checkPos(int pos) {
     }
 }
 
+//Finds the position of a node that contains the given data
 template<class ItemType>
 Node<ItemType>* LinkedList<ItemType>::getPos(const ItemType& data) {
     Node* current = head_->getNext();

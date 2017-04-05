@@ -9,6 +9,7 @@ Description:    Implemenation File for Shopping Task Class
 ************************************************************************/
 
 #include<string>
+#include<fstream>
 #include "shoppingTask.h"
 
 namespace taskwilliams {
@@ -25,6 +26,13 @@ void ShoppingTask::outputDetailed(std::ostream& out) {
     for(int i = 0; i < items_.size(); ++i) {
         out << "\t" << items_[i] << "\n";
     }
+}
+
+void ShoppingTask::fileOutput(std::ofstream& out) {
+    for(int i = 0; i < items_.size(); ++i) {
+        out << "|" << items_[i];
+    }
+    out << "\n";
 }
 
 } //taskwilliams

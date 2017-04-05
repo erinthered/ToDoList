@@ -17,6 +17,9 @@ Description:    Implementation file for Linked List Class
 
 namespace listwilliams {
 
+//Insert data to list such that data at previous < data < data at next
+//Precondition: ItemType has a defined Comparator operator () that determines relative value of ItemType class.
+//Postcondition: data is inserted in list such that data at previous < data < data at next, as defined by Comparator.
 template<class ItemType, typename Comparator>
 int SortedLinkedList<ItemType, Comparator>::sortedComparatorInsert(const ItemType& data, Comparator isLessThan) {
     Node<ItemType>* current = list_.getHead()->getNext();

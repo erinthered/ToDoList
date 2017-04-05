@@ -12,6 +12,7 @@ Description:    Main file for ToDo List Project
 #include<string>
 #include<string.h>
 #include<fstream>
+#include<sstream>
 #include "node.h"
 #include "linkedList.h"
 #include "SortedLinkedList.h"
@@ -42,7 +43,8 @@ void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType)
 void printFormattedDate(Task* task);
 void deleteTask(SortedLinkedList<Task*, Comparator>& list);
 void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
-void saveTasks(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
+void saveTasks(SortedLinkedList<Task*, Comparator>& list);
+int loadTasks(SortedLinkedList<Task*, Comparator>& list);
 
 int main() {
 
@@ -72,10 +74,10 @@ int main() {
                        printTasks(completedTasks, command);			
 		}
 		else if(command == "SAVE") {
-			//todo save function
+			saveTasks(toDoList);
 		}
 		else if(command == "LOAD") {
-			//todo load function
+			loadTasks(toDoList);
 		}
 		else if(command == "HELP") {
 			std::cout << "Please choose one of the following options: \n";
@@ -99,6 +101,82 @@ int main() {
 	return 0;
 }
 
+int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
+    Date date;
+    std::string filename, taskType, fileline, line, description, dateString;
+    char delimiter = '|';;
+    std::ifstream file;
+
+    std::cout << "What file would you like to load outstanding tasks from?\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    getline(std::cin, filename);   
+    file.open(filename);
+ 
+    if(file) {
+        list.clearList();
+        while(!file.eof()) {
+
+            getline(file, taskType, delimiter);
+            getline(file, dateString, delimiter);
+            date = getDateInput(dateString);
+        //Load general task
+            if(taskType == "G") {
+               getline(file, description);
+               Task* newTask = new Task(date, description);
+               list.push_back(newTask);
+            } 
+            else {
+                getline(file, description, delimiter); 
+                //Load shopping task      
+                if(taskType == "S") {
+                   std::vector<std::string> shoppingList1;
+                   //Get list of shopping items
+                   getline(file, line);
+                   std::string item;
+                   std::string::size_type found = line.find_last_of(delimiter);
+                   while(found != std::string::npos) {
+                       item = line.substr(found + 1);
+                       shoppingList1.push_back(item);
+                       line = line.substr(0, found);
+                       found = line.find_last_of(delimiter);
+                   }
+                   item = line;
+                   shoppingList1.push_back(item);
+                   std::vector<std::string> shoppingList;
+                   for(int i = shoppingList1.size(); i > 0; --i) {
+                       shoppingList.push_back(shoppingList1[1]);
+                    }
+ 
+                   ShoppingTask* shopping = new ShoppingTask(date, description, shoppingList);
+                   list.push_back(shopping);
+                } 
+                //Load Event Task
+                if(taskType == "E") {
+                    std::string location, time;
+                    getline(file, location, delimiter);
+                    getline(file, time);                  
+ 
+                    EventTask* event = new EventTask(date, description, location, time);
+                    list.push_back(event);
+                 }
+                 //Load Homework Task
+                 if(taskType == "H") {
+                     std::string course;
+                     getline(file, course);
+                     HomeworkTask* homework = new HomeworkTask(date, description, course);
+                     list.push_back(homework);
+
+                 }
+            }
+        }
+        file.close();
+        return 0;
+    }
+    else {
+        return -1;
+    }       
+}
+
 void saveTasks(SortedLinkedList<Task*, Comparator>& list) { 
     if(list.empty()) {
         std::cout << "You have no outstanding tasks!\n";
@@ -114,14 +192,10 @@ void saveTasks(SortedLinkedList<Task*, Comparator>& list) {
             out << current->getData()->getType() << "|";
             current->getData()->getDate().printMMDDYYYY(out);
             out << "|" << current->getData()->getDescription();
-            if(current->getData()->getType() == "G") {
-                out << std::endl;
-            }
- 
+            current->getData()->fileOutput(out);
             current = current->getNext();
     }
-
-    
+    out.close();    
 }
 
 
@@ -235,7 +309,9 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 
 		while(input != "DONE") {
 			std::getline(std::cin, input);
-			itemList.push_back(input);
+                        if(input != "DONE") {
+			    itemList.push_back(input);
+                        }
 		}
 		ShoppingTask* shopping = new ShoppingTask(date, description, itemList);
 		list.sortedComparatorInsert(shopping, Comparator());

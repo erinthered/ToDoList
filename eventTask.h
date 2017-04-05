@@ -9,6 +9,7 @@ Description:    Header File for Event Task Class
 ************************************************************************/
 
 #include<ostream>
+#include<fstream>
 #include<string>
 #include "date.h"
 #include "task.h"
@@ -32,6 +33,7 @@ public:
     virtual inline bool operator !=(const EventTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || location_ != rhs.location_ || time_ != rhs.time_; }
 
     virtual void outputDetailed(std::ostream& out);
+    virtual void fileOutput(std::ofstream& out) { out << "|" << location_ << "|" << time_ << "\n"; }
     
 //    friend std::ostream& operator <<(std::ostream& out, const EventTask& task) {
 //        out << task.getDate() << " - " << task.getDescription() << task.location_ << task.time_ << std::endl;

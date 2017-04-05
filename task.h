@@ -9,6 +9,7 @@ Description:    Header File for Generic Task Class
 ************************************************************************/
 
 #include<ostream>
+#include<fstream>
 #include<string>
 #include "date.h"
 
@@ -38,6 +39,7 @@ public:
     virtual inline bool operator !=(const Task& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate(); }
   
     virtual void outputDetailed(std::ostream& out) {} 
+    virtual void fileOutput(std::ofstream& out) { out << "\n"; }
 
 protected:
     Date date_;
