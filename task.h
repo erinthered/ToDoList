@@ -6,6 +6,7 @@ Class:          Spring 2017, CSCI 235-04, Mon & Wed 7:00pm-8:15pm
 Professor:      Aarsh Vora
 Purpose:        Assignment #2
 Description:    Header File for Generic Task Class
+                This is the Base Class for all other Task Classes
 ************************************************************************/
 
 #include<ostream>
@@ -23,9 +24,9 @@ public:
     typedef datewilliams::Date Date;
 
     Task(Date date, std::string description, std::string type = "G") : date_(date), description_(description), type_(type) {}
-//    Task(const Task& rhs);
     ~Task() {};
-    
+   
+    //Getters and setters 
     inline std::string getDescription() const { return description_; }
     inline Date getDate() const { return date_; }
     inline std::string getType() const { return type_; }
@@ -38,7 +39,9 @@ public:
     virtual inline bool operator ==(const Task& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate(); }
     virtual inline bool operator !=(const Task& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate(); }
   
+    //Virtual function to give output for Generic Task class data member functions
     virtual void outputDetailed(std::ostream& out) {} 
+    //Virtual function to give output for Generic Task class data member functions in file specific format
     virtual void fileOutput(std::ofstream& out) { out << "\n"; }
 
 protected:

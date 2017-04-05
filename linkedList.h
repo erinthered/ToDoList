@@ -21,16 +21,14 @@ template<class ItemType>
 class LinkedList {
 public:
 
-    typedef Node<ItemType> Node;
-
     LinkedList();
     ~LinkedList();
     LinkedList(const LinkedList<ItemType>& rhs);
     const LinkedList<ItemType>& operator =(const LinkedList<ItemType>& rhs);
 
     //Getters and Setters
-    inline Node* getHead() const { return head_; }
-    inline Node* getTail() const { return tail_; }
+    inline Node<ItemType>* getHead() const { return head_; }
+    inline Node<ItemType>* getTail() const { return tail_; }
     inline void setHead(Node* head) { head_ = head; }
     inline void setTail(Node* tail) { tail_ = tail; }
 
@@ -75,10 +73,10 @@ public:
     int clearList();                            
 
 private:
-    Node *head_, *tail_;
+    Node<ItemType> *head_, *tail_;
     int size_;
 
-    Node* getPos(const ItemType& data);  //Find position of data - helper function
+    Node<ItemType>* getPos(const ItemType& data);  //Find position of data - helper function
     int checkPos(int pos);               //Check for valid position taken as input - helper function
     void initializeSentinals();          //Initializes head and tail sentinals - helper function
 };

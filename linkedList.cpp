@@ -40,7 +40,7 @@ LinkedList<ItemType>::LinkedList(const LinkedList<ItemType>& rhs) {
     initializeSentinals();
     size_ = 0;
 
-    Node* current = rhs.head_->getNext();
+    Node<ItemType>* current = rhs.head_->getNext();
     for(int i = 0; i < rhs.size(); ++i) {
         push_back(current->getData());
         current = current->getNext();
@@ -54,7 +54,7 @@ const LinkedList<ItemType>& LinkedList<ItemType>::operator =(const LinkedList<It
     }
 
     clearList();
-    Node* current = rhs.head_->getNext();
+    Node<ItemType>* current = rhs.head_->getNext();
     for(int i = 0; i < rhs.size(); ++i) {
         push_back(current->getData());
         current = current->getNext();
@@ -79,7 +79,7 @@ int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
 //Precondition: Operator << must be defined for ItemType
 template<class ItemType>
 void LinkedList<ItemType>::write(std::ostream& out) {
-    Node* current = head_->getNext();
+    Node<ItemType>* current = head_->getNext();
     for(int i = 0; i < size(); ++i) {
         out << current->getData() << std::endl;
         current = current->getNext();
@@ -92,11 +92,11 @@ void LinkedList<ItemType>::write(std::ostream& out) {
 //node < data < data in next node
 template<class ItemType>
 int LinkedList<ItemType>::sortedInsert(const ItemType& data) {
-    Node* current = head_->getNext();
+    Node<ItemType>* current = head_->getNext();
     while(current != tail_ && current->getData() < data) {
             current = current->getNext();
      }
-    Node* newNode = new Node;
+    Node<ItemType>* newNode = new Node<ItemType>;
     newNode->setData(data);
     newNode->setPrevious(current->getPrevious());
     newNode->setNext(current);
@@ -112,12 +112,12 @@ int LinkedList<ItemType>::sortedInsert(const ItemType& data) {
 template<class ItemType>
 int LinkedList<ItemType>::insert(int pos, const ItemType& data) {
     if(checkPos(pos) == goodPosition) {
-        Node* current = head_->getNext();
+        Node<ItemType>* current = head_->getNext();
         
         for(int i = 0; i < pos; ++i) {
             current = current->getNext();
         }
-        Node* newNode = new Node;
+        Node<ItemType>* newNode = new Node<ItemType>;
         newNode->setData(data);
         newNode->setPrevious(current->getPrevious());
         newNode->setNext(current);
@@ -135,7 +135,7 @@ int LinkedList<ItemType>::insert(int pos, const ItemType& data) {
 template<class ItemType>
 int LinkedList<ItemType>::remove(int pos) {
     if(checkPos(pos) == goodPosition) {
-        Node* current = head_->getNext();
+        Node<ItemType>* current = head_->getNext();
        
         for(int i = 0; i < pos; ++i) {
             current = current->getNext();
@@ -195,8 +195,8 @@ int LinkedList<ItemType>::clearList() {
 //points at NULL, tail's previous pointer points at head, tail's next pointer points at NULL.
 template<class ItemType>
 void LinkedList<ItemType>::initializeSentinals() {
-    head_ = new Node;
-    tail_ = new Node;
+    head_ = new Node<ItemType>;
+    tail_ = new Node<ItemType>;
     head_->setNext(tail_);
     tail_->setPrevious(head_);
 }
@@ -220,7 +220,7 @@ int LinkedList<ItemType>::checkPos(int pos) {
 //Finds the position of a node that contains the given data
 template<class ItemType>
 Node<ItemType>* LinkedList<ItemType>::getPos(const ItemType& data) {
-    Node* current = head_->getNext();
+    Node<ItemType>* current = head_->getNext();
 
      while(current != tail_) {
         if(current->getData() == data) {

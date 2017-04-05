@@ -26,9 +26,13 @@ using namespace listwilliams;
 using namespace datewilliams;
 using namespace taskwilliams;
 
+//Comparator for Task Classes. Left task is < right task if the date is earlier.
+//If the date is the same, left task is < right task if the description is 
+//alphabetically < the description of the right task.
 struct Comparator {
 	bool operator ()(Task* lhs, Task* rhs) const {     
 		if(lhs->getDate() != rhs->getDate()) {
+                        //Compare dates using overloaded Date < operator.
 			return lhs->getDate() < rhs->getDate();
 		}
 		else {
@@ -37,47 +41,55 @@ struct Comparator {
 	}
 };
 
+//Gets Date as a string, converts to three ints (month, day, year) for processing and storage.
 Date getDateInput(std::string input);
+//Add a task to the ToDo List.
 void addTask(SortedLinkedList<Task*, Comparator>& list);
+//Print all tasks in ToDo List to the console in sorted order (see Comparator struct for sorting details)
 void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType);
+//Helper function that takes in the date data from a task object and formats it in MM/DD/YYYY format.
 void printFormattedDate(Task* task);
+//Remove a task from the ToDo List
 void deleteTask(SortedLinkedList<Task*, Comparator>& list);
+//Remove a task from the ToDo List and add it to the Completed Task List.
 void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
+//Saves tasks to a file given as user input
 void saveTasks(SortedLinkedList<Task*, Comparator>& list);
+//Loads tasks from a file given as user input
 int loadTasks(SortedLinkedList<Task*, Comparator>& list);
 
 int main() {
 
 	SortedLinkedList<Task*, Comparator> toDoList;            //List of current Tasks
 	SortedLinkedList<Task*, Comparator> completedTasks;      //List of completed Tasks
-	std::string command;
+	std::string command;                                     //input
 
 	std::cout << "Welcome to the To-Do List." << std::endl;
 
-	do {
+	do {    //while cammand is not EXIT, get input
 		std::cout << "Please enter a command, or type HELP for a full list of commands." << std::endl;
 		std::cin >> command;
 
 		if(command == "ADD") {
-			addTask(toDoList);
+			addTask(toDoList);  //Add to ToDoList
 		}
 		else if(command == "PRINT" || command == "DETAILED") {
-			printTasks(toDoList, command);
+			printTasks(toDoList, command);  //Print to console, regular or details
 		}
 		else if(command == "REMOVE") {
-                       deleteTask(toDoList);    
+                       deleteTask(toDoList);       //Remove task from list 
                 }
 		else if(command == "COMPLETE") {
-	               completeTask(toDoList, completedTasks); 
+	               completeTask(toDoList, completedTasks);   //Add task to Completed List
 		}
 		else if(command == "COMPLETED") {
-                       printTasks(completedTasks, command);			
+                       printTasks(completedTasks, command);	//Print Completed List to console	
 		}
 		else if(command == "SAVE") {
-			saveTasks(toDoList);
+			saveTasks(toDoList);      //Save tasks to specified file
 		}
 		else if(command == "LOAD") {
-			loadTasks(toDoList);
+			loadTasks(toDoList);     //Load tasks from specified file
 		}
 		else if(command == "HELP") {
 			std::cout << "Please choose one of the following options: \n";
@@ -92,7 +104,7 @@ int main() {
 			std::cout << "EXIT - Exit Program\n";
 		}
 		else if(command == "EXIT") {
-			//Do nothing
+			//Exit program
 		}
 		else {
 			std::cout << "I didn't understand that command.\n";
@@ -104,11 +116,11 @@ int main() {
 int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
     Date date;
     std::string filename, taskType, fileline, line, description, dateString;
-    char delimiter = '|';;
+    char delimiter = '|';   //Tasks loaded with | character deliminations
     std::ifstream file;
 
     std::cout << "What file would you like to load outstanding tasks from?\n";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore('\n');
     getline(std::cin, filename);   
     file.open(filename);
  
@@ -116,21 +128,22 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
         list.clearList();
         while(!file.eof()) {
 
-            getline(file, taskType, delimiter);
-            getline(file, dateString, delimiter);
-            date = getDateInput(dateString);
-        //Load general task
+            getline(file, taskType, delimiter);      //get tasktype
+            getline(file, dateString, delimiter);    //get Date as string
+            date = getDateInput(dateString);         //Convert Date to Date object
+
+            //Load general task
             if(taskType == "G") {
-               getline(file, description);
+               getline(file, description);           //get task description
                Task* newTask = new Task(date, description);
                list.push_back(newTask);
             } 
             else {
-                getline(file, description, delimiter); 
+                getline(file, description, delimiter); //get task description
                 //Load shopping task      
                 if(taskType == "S") {
                    std::vector<std::string> shoppingList1;
-                   //Get list of shopping items
+                   //Get list of shopping items - TO FIX
                    getline(file, line);
                    std::string item;
                    std::string::size_type found = line.find_last_of(delimiter);
@@ -153,8 +166,8 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
                 //Load Event Task
                 if(taskType == "E") {
                     std::string location, time;
-                    getline(file, location, delimiter);
-                    getline(file, time);                  
+                    getline(file, location, delimiter);  //get event task location
+                    getline(file, time);                 //get event task time
  
                     EventTask* event = new EventTask(date, description, location, time);
                     list.push_back(event);
@@ -162,7 +175,7 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
                  //Load Homework Task
                  if(taskType == "H") {
                      std::string course;
-                     getline(file, course);
+                     getline(file, course);             //get homework task course
                      HomeworkTask* homework = new HomeworkTask(date, description, course);
                      list.push_back(homework);
 
@@ -170,10 +183,10 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
             }
         }
         file.close();
-        return 0;
+        return 0;        //File opened correctly
     }
     else {
-        return -1;
+        return -1;       //Error code if file fails to open
     }       
 }
 
@@ -186,10 +199,12 @@ void saveTasks(SortedLinkedList<Task*, Comparator>& list) {
     std::cout << "Where would you like to save your outstanding tasks?\n";
     std::cin >> filename;
     out.open(filename);
-    
+   
+    //Iterate through Sorted Linked List - ToDo List. Add task data on one line, separated by
+    //'|' characters, followed by '\n' character
     Node<Task*>* current = list.getHead()->getNext();
     for(int i = 0; i < list.size(); ++i) {
-            out << current->getData()->getType() << "|";
+            out << current->getData()->getType() << "|";  
             current->getData()->getDate().printMMDDYYYY(out);
             out << "|" << current->getData()->getDescription();
             current->getData()->fileOutput(out);
@@ -213,9 +228,9 @@ void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Ta
             std::cin >> pos;
         }
         Task* toComplete;
-        list.getList().retrieve(pos-1, toComplete);
-        completed.sortedComparatorInsert(toComplete, Comparator());
-        list.remove(pos-1);
+        list.getList().retrieve(pos-1, toComplete);    //Find task
+        completed.sortedComparatorInsert(toComplete, Comparator());  //insert task node to Completed List
+        list.remove(pos-1); //Remove task from ToDo List
         std::cout << "Task marked complete successfully.\n";
     }
 }
@@ -228,12 +243,12 @@ void deleteTask(SortedLinkedList<Task*, Comparator>& list) {
             int pos;
             std::cout << "Which task would you like to remove?\n";
             std::cin >> pos;
-            while(pos < 0 || pos > list.size()) {
+            while(pos < 0 || pos > list.size()) {     //Check for correct input
                 std::cout << "That was not a valid number. Please try again.\n";
                 std::cout << "Which task would you like to remove?\n";
                 std::cin >> pos;
             }
-            list.remove(pos-1);
+            list.remove(pos-1);    //Remove task
         }
 }
 
@@ -244,10 +259,10 @@ void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType)
 		return;
 	}
 	for(int i = 0; i < list.size(); ++i) {
-		std::cout << i+1 << ". ";
+		std::cout << i+1 << ". ";  //Print task in number list
 
-		list.getList().retrieve(i, current);
-		printFormattedDate(current);
+		list.getList().retrieve(i, current);  //Get current task
+		printFormattedDate(current);          
 		std::cout << " - ";
 
 		if(current->getType() == "E") {
@@ -269,6 +284,7 @@ void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType)
 	}
 }
 
+//Print Date object in specified format
 void printFormattedDate(Task* task) {
 	std::cout << std::setw(2) << std::setfill('0') << task->getDate().getMonth() << '/' << std::setw(2) << task->getDate().getDay() << '/' << task->getDate().getYear();
 }
@@ -281,7 +297,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 	std::cout << "What type of task is this? [G: Generic, S: Shopping, E: Event, H: Homework]\n";
 	std::cin >> type;
 
-	while(type != "G" && type != "S" && type != "E" && type != "H") {
+	while(type != "G" && type != "S" && type != "E" && type != "H") {    //check input
 		std::cout << "That was not a valid response. Please enter one of the following choices: " << std::endl;
 		std::cout << "[G: Generic, S: Shopping, E: Event, H: Homework]\n";
 		std::cin >> type;
@@ -291,7 +307,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 	std::cin >> dateString;
 	date = getDateInput(dateString); 
 
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cin.ignore('\n');
 	std::cout << "How would you describe this task?\n";
 	std::getline(std::cin, description);
 
@@ -344,15 +360,15 @@ Date getDateInput(std::string input) {
 	std::string month, day, year;
 	std::string delimiter = "/";
 
-	month = input.substr(0, input.find(delimiter));
-	input.erase(0, input.find(delimiter) + delimiter.length());
-	day = input.substr(0, input.find(delimiter));
-	input.erase(0, input.find(delimiter) + delimiter.length());
-	year = input;
+	month = input.substr(0, input.find(delimiter));  //get substring month
+	input.erase(0, input.find(delimiter) + delimiter.length()); //remove / character
+	day = input.substr(0, input.find(delimiter));    //get substring day
+	input.erase(0, input.find(delimiter) + delimiter.length());  //remove / character
+	year = input;                                   //get substring year
 
-	date.setMonth(std::stoi(month.c_str()));
-	date.setDay(std::stoi(day.c_str()));
-	date.setYear(std::stoi(year.c_str()));
+	date.setMonth(std::stoi(month.c_str()));       //convert month to int
+	date.setDay(std::stoi(day.c_str()));           //convert day to int
+	date.setYear(std::stoi(year.c_str()));         //convert year to int
 
 	return date;
 }

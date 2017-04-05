@@ -23,6 +23,7 @@ class HomeworkTask : public Task {
 public:
     HomeworkTask(Date date, std::string description, std::string course, std::string type = "H") : Task(date, description, type), course_(course) {}
 
+    //Getters and setters for course data members, inherits all base Task class getters and setters
     inline std::string getCourse() const { return course_; }
     inline void setCourse(std::string course) { course_ = course; }
 
@@ -30,13 +31,10 @@ public:
     virtual inline bool operator ==(const HomeworkTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && course_ == rhs.course_; }
     virtual inline bool operator !=(const HomeworkTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || course_ != rhs.course_; }
 
+    //Redefined virtual function to give output for Homework Task class data member functions
     virtual void outputDetailed(std::ostream& out);
+    //Redefined virtual function to give output for Homework Task class data member functions in file output specific format
     virtual void fileOutput(std::ofstream& out) { out << "|" << course_ << "\n"; }
-
-//    friend std::ostream& operator <<(std::ostream& out, const HomeworkTask& task) {
-//        out << task.getDate() << " - " << task.getDescription() << " - " << task.course_ << std::endl;
-//        return out;
- //    }
 
 protected:
     std::string course_;

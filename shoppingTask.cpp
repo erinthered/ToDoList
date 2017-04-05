@@ -21,6 +21,7 @@ ShoppingTask& ShoppingTask::operator =(const ShoppingTask& rhs) {
     return *this;
 }
 
+//Redefined virtual function to give output for Shopping Task class data member functions
 void ShoppingTask::outputDetailed(std::ostream& out) {
     out << "\tITEMS TO PURCHASE: \n";
     for(int i = 0; i < items_.size(); ++i) {
@@ -28,6 +29,7 @@ void ShoppingTask::outputDetailed(std::ostream& out) {
     }
 }
 
+//Redefined virtual function to give output for Shopping Task class data member functions in file specific format
 void ShoppingTask::fileOutput(std::ofstream& out) {
     for(int i = 0; i < items_.size(); ++i) {
         out << "|" << items_[i];

@@ -23,6 +23,7 @@ class EventTask : public Task {
 public:
     EventTask(Date date, std::string description, std::string location, std::string time, std::string type = "E") : Task(date, description, type), location_(location), time_(time) {}
 
+    //Getters and setters for Event Task data members, also inherits base Task class getters and setters
     inline std::string getLocation() const { return location_; }
     inline void setLocation(std::string location) { location_ = location; }
     inline std::string getTime() const { return time_; }
@@ -32,14 +33,11 @@ public:
     virtual inline bool operator ==(const EventTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && location_ == rhs.location_ && time_ == rhs.time_; }
     virtual inline bool operator !=(const EventTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || location_ != rhs.location_ || time_ != rhs.time_; }
 
+    //Redefined virtual function to give output for Event Task class data member functions
     virtual void outputDetailed(std::ostream& out);
+    //Redefined virtual function to give output for Event Task class data member functions in file specific format
     virtual void fileOutput(std::ofstream& out) { out << "|" << location_ << "|" << time_ << "\n"; }
     
-//    friend std::ostream& operator <<(std::ostream& out, const EventTask& task) {
-//        out << task.getDate() << " - " << task.getDescription() << task.location_ << task.time_ << std::endl;
-//        return out;
-//     }
-
 protected:
     std::string location_;
     std::string time_;

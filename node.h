@@ -20,6 +20,7 @@ public:
 
     Node() : previous_(NULL), next_(NULL) {}
 
+    //Getters and setters
     ItemType getData( ) const { return data_; }
     Node* getPrevious() const { return previous_; }
     Node* getNext() const { return next_; }
@@ -29,7 +30,7 @@ public:
 
 private:
  
-    ItemType data_;
+    ItemType data_;   
     Node* previous_; //Pointer to previous Node
     Node* next_;     //Pointer to next Node
 };

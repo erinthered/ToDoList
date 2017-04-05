@@ -24,6 +24,7 @@ class ShoppingTask : public Task {
 public:
     ShoppingTask(Date date, std::string description, std::vector<std::string> items, std::string type = "S") : Task(date, description, type), items_(items) {}
 
+    //Getters and setters for Task Class data members, also inherits all getters and setters from base Task class
     inline std::vector<std::string> getItems() const { return items_; }
     inline void setItems(std::vector<std::string> items) { items_ = items; }
 
@@ -31,11 +32,13 @@ public:
     inline bool operator ==(const ShoppingTask& rhs) { return getDescription() == rhs.getDescription() && getDate() == rhs.getDate() && items_ == rhs.items_; }
     inline bool operator !=(const ShoppingTask& rhs) { return getDescription() != rhs.getDescription() || getDate() != rhs.getDate() || items_ != rhs.items_; }
 
+    //Redefined virtual function to give output for Shopping Task class data member functions
     virtual void outputDetailed(std::ostream& out);
+    //Redefined virtual function to give output for Shopping Task class data member functions in file specific format
     virtual void fileOutput(std::ofstream& out);
 
 protected:
-    std::vector<std::string> items_;
+    std::vector<std::string> items_;  //Vector of items in shopping list
 };
 
 } //taskwilliams
