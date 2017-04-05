@@ -66,7 +66,7 @@ const LinkedList<ItemType>& LinkedList<ItemType>::operator =(const LinkedList<It
 template<class ItemType>
 int LinkedList<ItemType>::retrieve(int pos, ItemType& data) {
    if(checkPos(pos) == goodPosition) {
-        Node* current = head_->getNext();
+        Node<ItemType>* current = head_->getNext();
         for(int i = 0; i < pos; ++i) {
             current = current->getNext();
         }

@@ -13,6 +13,7 @@ Description:    Main file for ToDo List Project
 #include<string.h>
 #include<fstream>
 #include<sstream>
+#include<stdlib.h>
 #include "node.h"
 #include "linkedList.h"
 #include "SortedLinkedList.h"
@@ -36,6 +37,7 @@ struct Comparator {
 			return lhs->getDate() < rhs->getDate();
 		}
 		else {
+                        //Compare string values using string compare
 			return strcmp(lhs->getDescription().c_str(), rhs->getDescription().c_str()) < 0;
 		}
 	}
@@ -68,7 +70,7 @@ int main() {
 
 	do {    //while cammand is not EXIT, get input
 		std::cout << "Please enter a command, or type HELP for a full list of commands." << std::endl;
-		std::cin >> command;
+		std::getline(std::cin, command);
 
 		if(command == "ADD") {
 			addTask(toDoList);  //Add to ToDoList
@@ -120,7 +122,6 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
     std::ifstream file;
 
     std::cout << "What file would you like to load outstanding tasks from?\n";
-    std::cin.ignore('\n');
     getline(std::cin, filename);   
     file.open(filename);
  
@@ -142,23 +143,20 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
                 getline(file, description, delimiter); //get task description
                 //Load shopping task      
                 if(taskType == "S") {
-                   std::vector<std::string> shoppingList1;
-                   //Get list of shopping items - TO FIX
-                   getline(file, line);
-                   std::string item;
-                   std::string::size_type found = line.find_last_of(delimiter);
-                   while(found != std::string::npos) {
-                       item = line.substr(found + 1);
-                       shoppingList1.push_back(item);
-                       line = line.substr(0, found);
-                       found = line.find_last_of(delimiter);
-                   }
-                   item = line;
-                   shoppingList1.push_back(item);
                    std::vector<std::string> shoppingList;
-                   for(int i = shoppingList1.size(); i > 0; --i) {
-                       shoppingList.push_back(shoppingList1[1]);
-                    }
+                   //Get list of shopping items
+                   getline(file, line);   //get entire line of shopping items
+                   std::string item;
+                   std::string::size_type begin = 0;  //beginning of line
+                   std::string::size_type found = line.find_first_of(delimiter);  //find first instance of | char in line
+                   while(found != std::string::npos) {   //while the end of the line is not reached
+                       item = line.substr(begin, (found - begin));   //item is substring between begin and number of chars between found & begin
+                       shoppingList.push_back(item);     //push to vector
+                       begin = found + 1;                //advance begin to next section
+                       found = line.find_first_of(delimiter, begin);  //find next instance of | char in line
+                   }
+                   item = line.substr(begin, (found - begin));   //add final item;
+                   shoppingList.push_back(item);
  
                    ShoppingTask* shopping = new ShoppingTask(date, description, shoppingList);
                    list.push_back(shopping);
@@ -190,6 +188,8 @@ int loadTasks(SortedLinkedList<Task*, Comparator>& list) {
     }       
 }
 
+//Save ToDo List to file name given as input by user
+//Postcondition: file filename contains saved Sorted Linked List of Task*s
 void saveTasks(SortedLinkedList<Task*, Comparator>& list) { 
     if(list.empty()) {
         std::cout << "You have no outstanding tasks!\n";
@@ -197,7 +197,7 @@ void saveTasks(SortedLinkedList<Task*, Comparator>& list) {
     std::string filename;
     std::ofstream out;
     std::cout << "Where would you like to save your outstanding tasks?\n";
-    std::cin >> filename;
+    std::getline(std::cin, filename);
     out.open(filename);
    
     //Iterate through Sorted Linked List - ToDo List. Add task data on one line, separated by
@@ -213,24 +213,28 @@ void saveTasks(SortedLinkedList<Task*, Comparator>& list) {
     out.close();    
 }
 
-
+//Remove tasks from outstanding ToDo List and add to Completed List
 void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed) {
     if(list.empty()) {
         std::cout << "You have no outstanding tasks!\n";
     }
     else {
         int pos;
+        std::string stringPos;
         std::cout << "Which task would you like to complete?\n";
-        std::cin >> pos;
+        std::getline(std::cin, stringPos);
+        pos = atoi(stringPos.c_str());                               //convert string input to int value
+
         while (pos < 0 || pos > list.size()) {
             std::cout << "That was not a valid number. Please try again.\n";
             std::cout << "Which task would you like to complete?\n";
-            std::cin >> pos;
+            std::getline(std::cin, stringPos);
+            pos = atoi(stringPos.c_str());                          //convert string input to int value
         }
         Task* toComplete;
-        list.getList().retrieve(pos-1, toComplete);    //Find task
-        completed.sortedComparatorInsert(toComplete, Comparator());  //insert task node to Completed List
-        list.remove(pos-1); //Remove task from ToDo List
+        list.getList().retrieve(pos-1, toComplete);                 //Find task
+        completed.sortedComparatorInsert(toComplete, Comparator()); //insert task node to Completed List
+        list.remove(pos-1);                                         //Remove task from ToDo List
         std::cout << "Task marked complete successfully.\n";
     }
 }
@@ -240,49 +244,52 @@ void deleteTask(SortedLinkedList<Task*, Comparator>& list) {
             std::cout << "You have no outstanding tasks!\n";
         }
         else {
+            std::string stringPos;
             int pos;
             std::cout << "Which task would you like to remove?\n";
-            std::cin >> pos;
+            std::getline(std::cin, stringPos);
+            pos = atoi(stringPos.c_str());            //Convert string input to int value
+
             while(pos < 0 || pos > list.size()) {     //Check for correct input
                 std::cout << "That was not a valid number. Please try again.\n";
                 std::cout << "Which task would you like to remove?\n";
-                std::cin >> pos;
+                std::getline(std::cin, stringPos);
+                pos = atoi(stringPos.c_str());        //convert string input to int value
             }
-            list.remove(pos-1);    //Remove task
+            list.remove(pos-1);                      //Remove task
         }
 }
 
 void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType) {
-	Task* current;
 	if(list.empty()) {
 		std::cout << "You have no outstanding tasks!\n";
 		return;
 	}
-	for(int i = 0; i < list.size(); ++i) {
-		std::cout << i+1 << ". ";  //Print task in number list
 
-		list.getList().retrieve(i, current);  //Get current task
-		printFormattedDate(current);          
-		std::cout << " - ";
+         Node<Task*>* current = list.getHead()->getNext();                //start at beginning of list
+         for(int i = 0; i < list.size(); ++i) {
+                 current->getData()->getDate().printMMDDYYYY(std::cout);  //print formatted date
+                 std::cout << " - ";
 
-		if(current->getType() == "E") {
-			std::cout << "[Event] ";
-		}
-		if(current->getType() == "H") {
-			std::cout << "[Homework] ";
-		}
-		if(current->getType() == "S") {
-			std::cout << "[Shopping] ";
-		}
-                
-                std::cout << current->getDescription();
+                 if(current->getData()->getType() == "E") {
+                         std::cout << "[Event] ";
+                 }
+                 if(current->getData()->getType() == "H") {
+                         std::cout << "[Homework] ";
+                 }
+                 if(current->getData()->getType() == "S") {
+                         std::cout << "[Shopping] ";
+                 }
+                 std::cout << current->getData()->getDescription() << std::endl;  //get current Task description
+      
+                 //Print detailed output for different task classes         
+                 if(printType == "DETAILED") {
+                     current->getData()->outputDetailed(std::cout);
+                 }
 
-                std::cout << std::endl;
-                if(printType == "DETAILED") {
-                    current->outputDetailed(std::cout);
-                }
+                 current = current->getNext();  //advance iteration
+        }
 	}
-}
 
 //Print Date object in specified format
 void printFormattedDate(Task* task) {
@@ -295,19 +302,18 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 	std::string dateString, description;
 
 	std::cout << "What type of task is this? [G: Generic, S: Shopping, E: Event, H: Homework]\n";
-	std::cin >> type;
+	std::getline(std::cin, type);
 
 	while(type != "G" && type != "S" && type != "E" && type != "H") {    //check input
 		std::cout << "That was not a valid response. Please enter one of the following choices: " << std::endl;
 		std::cout << "[G: Generic, S: Shopping, E: Event, H: Homework]\n";
-		std::cin >> type;
+		std::getline(std::cin, type);
 	}
 
 	std::cout << "When is this task due?\n";
-	std::cin >> dateString;
+	std::getline(std::cin, dateString);
 	date = getDateInput(dateString); 
 
-	std::cin.ignore('\n');
 	std::cout << "How would you describe this task?\n";
 	std::getline(std::cin, description);
 
@@ -338,7 +344,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 		std::cout << "Where is this event taking place?\n";
 		std::getline(std::cin, location);
 		std::cout << "When is this event taking place?\n";
-		std::cin >> time;
+		std::getline(std::cin,time);
 
 		EventTask* event = new EventTask(date, description, location, time);
 		list.sortedComparatorInsert(event, Comparator());
