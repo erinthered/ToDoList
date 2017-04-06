@@ -29,8 +29,8 @@ public:
     //Getters and Setters
     inline Node<ItemType>* getHead() const { return head_; }
     inline Node<ItemType>* getTail() const { return tail_; }
-    inline void setHead(Node* head) { head_ = head; }
-    inline void setTail(Node* tail) { tail_ = tail; }
+    inline void setHead(Node<ItemType>* head) { head_ = head; }
+    inline void setTail(Node<ItemType>* tail) { tail_ = tail; }
 
     inline int size() const { return size_; }
     inline void incrementSize() { ++size_; }
