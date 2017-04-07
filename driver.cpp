@@ -12,8 +12,6 @@ Description:    Driver implementation file for ToDo List Project
 #include<string>
 #include<string.h>
 #include<fstream>
-#include<sstream>
-//#include<stdlib.h>
 #include "node.h"
 #include "linkedList.h"
 #include "SortedLinkedList.h"
@@ -254,8 +252,7 @@ void Driver::printTasks(SortedLinkedList<Task*, Comparator> list, std::string pr
                  }
                  if(current->getData()->getType() == "H") {
                          std::cout << "[Homework] ";
-                 }
-                 if(current->getData()->getType() == "S") {
+
                          std::cout << "[Shopping] ";
                  }
                  std::cout << current->getData()->getDescription() << std::endl;  //get current Task description

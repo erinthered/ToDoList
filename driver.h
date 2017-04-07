@@ -8,20 +8,10 @@ Purpose:        Assignment #2
 Description:    Driver header file for ToDo List Project
  **************************************************************************/
 
-#include<iostream>
 #include<string>
 #include<string.h>
-#include<fstream>
-#include<sstream>
-#include<stdlib.h>
-#include "node.h"
-#include "linkedList.h"
 #include "SortedLinkedList.h"
-#include "date.h"
 #include "task.h"
-#include "homeworkTask.h"
-#include "shoppingTask.h"
-#include "eventTask.h"
 
 #ifndef __CS235_DRIVER_H_
 #define __CS235_DRIVER_H_
