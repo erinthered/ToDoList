@@ -23,9 +23,9 @@ ShoppingTask& ShoppingTask::operator =(const ShoppingTask& rhs) {
 
 //Redefined virtual function to give output for Shopping Task class data member functions
 void ShoppingTask::outputDetailed(std::ostream& out) {
-    out << "\tITEMS TO PURCHASE: \n";
+    out << "    ITEMS TO PURCHASE: \n";
     for(int i = 0; i < items_.size(); ++i) {
-        out << "\t" << items_[i] << "\n";
+        out << "    " << items_[i] << "\n";
     }
 }
 

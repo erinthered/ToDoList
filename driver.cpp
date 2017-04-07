@@ -1,11 +1,11 @@
 /*************************************************************************
-Title:          main.cpp
+Title:          driver.cpp
 Author:         Erin Williams
 Date Created:   3/3/17
 Class:          Spring 2017, CSCI 235-04, Mon & Wed 7:00pm-6:50pm
 Professor:      Aarsh Vora
 Purpose:        Assignment #2
-Description:    Main file for ToDo List Project
+Description:    Driver implementation file for ToDo List Project
  **************************************************************************/
 
 #include<iostream>
@@ -27,66 +27,16 @@ Description:    Main file for ToDo List Project
 using namespace listwilliams;
 using namespace datewilliams;
 using namespace taskwilliams;
-using namespace tododriverwilliams;
 
-int main() {
-    
-Driver driver;
-driver.run();
+namespace tododriverwilliams {
 
-return 0;
-
-}
-
-/*
-
-//Comparator for Task Classes. Left task is < right task if the date is earlier.
-//If the date is the same, left task is < right task if the description is 
-//alphabetically < the description of the right task.
-struct Comparator {
-	bool operator ()(Task* lhs, Task* rhs) const {     
-		if(lhs->getDate() != rhs->getDate()) {
-                        //Compare dates using overloaded Date < operator.
-			return lhs->getDate() < rhs->getDate();
-		}
-		else {
-                        //Compare string values using string compare
-			return strcmp(lhs->getDescription().c_str(), rhs->getDescription().c_str()) < 0;
-		}
-	}
-};
-
-//Gets Date as a string, converts to three ints (month, day, year) for processing and storage.
-//Returns an object of Date class
-//Precondition: User input is in the form MM/DD/YYYY
-//Postcondition: User input has been converted to an object of Date class
-Date getDateInput(std::string input);
-
-//Add a task to the ToDo List.
-//Postcondition: Task has been added in sorted order such that previous Task < Task < next Task   *************CHECK THIS************
-void addTask(SortedLinkedList<Task*, Comparator>& list);
-
-//Print all tasks in ToDo List to the console in sorted order (see Comparator struct for sorting details)
-void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType);
-//Helper function that takes in the date data from a task object and formats it in MM/DD/YYYY format.
-void printFormattedDate(Task* task);
-
-//Remove a task from the ToDo List
-void deleteTask(SortedLinkedList<Task*, Comparator>& list);
-
-//Remove a task from the ToDo List and add it to the Completed Task List.
-void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed);
-
-//Saves tasks to a file given as user input
-void saveTasks(SortedLinkedList<Task*, Comparator>& list);
-//Loads tasks from a file given as user input
-void loadTasks(SortedLinkedList<Task*, Comparator>& list);
-
-//Helper function that returns true if list is empty and prints a message to the user.
-//Returns false if the list contains one or more tasks.
-bool isEmpty(SortedLinkedList<Task*, Comparator> list);
-
-int main() {
+//Driver function for ToDoList
+//Gets input from the user and performs the specified tasks on a sorted linked list of outstanding tasks and a
+//sorted linked list of completed tasks. Can add tasks to a list, remove tasks, print tasks in regular or detailed
+//format, mark tasks as completed (move to completed list), print list of completed tasks, save current todo list to
+//a specified file, and load tasks to the current todo list from a specified file (deleting any existing tasks). The
+//user can print a list of possible commands to the screen by typing HELP.
+void Driver::run() {
 
 	SortedLinkedList<Task*, Comparator> toDoList;            //List of current Tasks
 	SortedLinkedList<Task*, Comparator> completedTasks;      //List of completed Tasks
@@ -138,14 +88,13 @@ int main() {
 			std::cout << "I didn't understand that command.\n";
 		}
 	} while(command != "EXIT");
-	return 0;
 }
 
 //Load tasks from file given as user input to outstanding task list
 //Postcondition: outstanding ToDo list contains all Tasks loaded from specified file.
 //and all existing tasks before loading are deleted.
 //Print error message to console if file fails to open and load fails.
-void loadTasks(SortedLinkedList<Task*, Comparator>& list) {
+void Driver::loadTasks(SortedLinkedList<Task*, Comparator>& list) {
     Date date;
     std::string filename, taskType, line, description, dateString;
     char delimiter = '|';   //Tasks loaded with | character deliminations
@@ -222,7 +171,7 @@ void loadTasks(SortedLinkedList<Task*, Comparator>& list) {
 //Save ToDo List to file name given as input by user
 //Postcondition: file contains saved Sorted Linked List of Tasks separated
 //by newline characters. Each data item in each line is separated by a | character.
-void saveTasks(SortedLinkedList<Task*, Comparator>& list) { 
+void Driver::saveTasks(SortedLinkedList<Task*, Comparator>& list) { 
     if(!isEmpty(list)) {             //Check for empty list
         std::string filename;
         std::ofstream out;
@@ -251,7 +200,7 @@ void saveTasks(SortedLinkedList<Task*, Comparator>& list) {
 }
 
 //Remove tasks from outstanding ToDo List and add to Completed List
-void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed) {
+void Driver::completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Task*, Comparator>& completed) {
     if(!isEmpty(list)) {                                              //Check for empty list
         int pos;
         std::string stringPos;
@@ -273,7 +222,7 @@ void completeTask(SortedLinkedList<Task*, Comparator>& list, SortedLinkedList<Ta
     }
 }
 
-void deleteTask(SortedLinkedList<Task*, Comparator>& list) {
+void Driver::deleteTask(SortedLinkedList<Task*, Comparator>& list) {
         if(!isEmpty(list)) {                                        //Check for empty list
             std::string stringPos;
             int pos;
@@ -292,7 +241,7 @@ void deleteTask(SortedLinkedList<Task*, Comparator>& list) {
          }
 }
 
-void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType) {
+void Driver::printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType) {
          if(!isEmpty(list)) {
              Node<Task*>* current = list.getHead()->getNext();           //start at beginning of list
              for(int i = 0; i < list.size(); ++i) {
@@ -322,13 +271,13 @@ void printTasks(SortedLinkedList<Task*, Comparator> list, std::string printType)
 }
 
 //Print Date object in MM/DD/YYYY format
-void printFormattedDate(Task* task) {
+void Driver::printFormattedDate(Task* task) {
 	std::cout << std::setw(2) << std::setfill('0') << task->getDate().getMonth() << '/' << std::setw(2) << task->getDate().getDay() << '/' << task->getDate().getYear();
 }
 
 //Add task to a sorted linked list
 //Postcondition: Task is inserted in List such that the previous Task < Task < the next Task.
-void addTask(SortedLinkedList<Task*, Comparator>& list) {
+void Driver::addTask(SortedLinkedList<Task*, Comparator>& list) {
 	Date date;
 	std::string type, dateString, description;
 
@@ -359,7 +308,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 		std::vector<std::string> itemList;
 		std::string input;
 
-		std::cout << "What items do you need to buy?";
+		std::cout << "What items do you need to buy?"; 
 		std::cout << " [Type your item and press ENTER to add another item. Type DONE to complete the list.]\n";
 
 		while(input != "DONE") {
@@ -401,7 +350,7 @@ void addTask(SortedLinkedList<Task*, Comparator>& list) {
 //Returns input converted to an object of Date class
 //Preconditon: User intput is a string in the form MM/DD/YYYY
 //Postcondition: Input is converted to an object of Date class
-Date getDateInput(std::string input) {
+Date Driver::getDateInput(std::string input) {
 	Date date;
 	std::string month, day, year;
 	std::string delimiter = "/";
@@ -422,7 +371,7 @@ Date getDateInput(std::string input) {
 //Check for an empty list - helper function
 //Returns true if list is empty and outputs message
 //Returns false if list contains Tasks
-bool isEmpty(SortedLinkedList<Task*, Comparator> list) {
+bool Driver::isEmpty(SortedLinkedList<Task*, Comparator> list) {
     if(list.empty()) {
        std::cout << "You have no outstanding tasks!\n";
        return true;
@@ -432,4 +381,4 @@ bool isEmpty(SortedLinkedList<Task*, Comparator> list) {
     }
  }
 
-*/
+} //tododriverwilliams

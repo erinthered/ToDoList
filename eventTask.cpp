@@ -24,6 +24,6 @@ EventTask& EventTask::operator =(const EventTask& rhs) {
 
 //Redefined virtual function to give output for Event Task class data member functions
 void EventTask::outputDetailed(std::ostream& out) {
-    out << "\tWHERE: " << location_ << "\n" << "\tWHEN: " << time_ << "\n";
+    out << "    WHERE: " << location_ << "\n" << "    WHEN: " << time_ << "\n";
 }
 } //taskwilliams

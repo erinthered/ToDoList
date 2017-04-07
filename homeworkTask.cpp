@@ -23,7 +23,7 @@ HomeworkTask& HomeworkTask::operator =(const HomeworkTask& rhs) {
 
 //Redefined virtual function to give output for Homework Task class data member functions
 void HomeworkTask::outputDetailed(std::ostream& out) {
-    out << "\tSUBJECT: " << course_ << "\n";
+    out << "    SUBJECT: " << course_ << "\n";
 }
 
 } //taskwilliams

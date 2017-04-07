@@ -12,7 +12,7 @@ CC = g++
 LFLAGS = -std=c++11
 CFLAGS = -c -Wall
 
-SOURCES = main.cpp node.cpp linkedList.cpp SortedLinkedList.cpp date.cpp task.cpp eventTask.cpp homeworkTask.cpp shoppingTask.cpp
+SOURCES = main.cpp driver.cpp node.cpp linkedList.cpp SortedLinkedList.cpp date.cpp task.cpp eventTask.cpp homeworkTask.cpp shoppingTask.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE_NAME = Project2
 
